@@ -17,13 +17,30 @@ const behavior = readFileSync(
 
 test('discloses simulated data and exposes the full review workflow', () => {
   assert.match(html, /Simulated design data/i);
-  assert.match(html, /HSP-SST \/ Power Module A/);
+  assert.doesNotMatch(html, /HSP-SST \/ Power Module A/);
   assert.match(html, /Altium Designer/);
   assert.match(html, /Autodesk Inventor/);
 
   for (const action of ['START_SYNC', 'CREATE_PROPOSAL', 'APPROVE', 'RESET']) {
     assert.match(html, new RegExp(`data-action="${action}"`));
   }
+});
+
+test('explains the engineering case and Ferry engagement model', () => {
+  for (const label of [
+    'The problem',
+    'Systems in the loop',
+    'What Ferry builds',
+    'Engineering outcome',
+    'Why Ferry',
+  ]) {
+    assert.match(html, new RegExp(label, 'i'));
+  }
+
+  assert.match(html, /coordination layer/i);
+  assert.match(html, /existing engineering tools/i);
+  assert.match(html, /engineer approval/i);
+  assert.match(html, /company-specific design rules/i);
 });
 
 test('renders a CSS-authored cabinet model with named engineering parts', () => {
@@ -61,6 +78,23 @@ test('uses the restrained industrial visual system', () => {
   assert.match(css, /:focus-visible/);
   assert.doesNotMatch(css, /linear-gradient|radial-gradient|backdrop-filter/i);
   assert.doesNotMatch(html, /sparkle|chatbot|AI-powered|magic/i);
+});
+
+test('styles the editorial briefing and Ferry method responsively', () => {
+  for (const selector of [
+    '.story-brief',
+    '.brief-item',
+    '.workflow-intro',
+    '.workflow-context',
+    '.ferry-method',
+    '.method-steps',
+  ]) {
+    assert.match(css, new RegExp(selector.replace('.', '\\.')));
+  }
+
+  assert.match(css, /@media \(max-width:\s*760px\)[\s\S]*\.story-brief/);
+  assert.match(css, /@media \(max-width:\s*760px\)[\s\S]*\.ferry-method/);
+  assert.doesNotMatch(css, /linear-gradient|radial-gradient|backdrop-filter/i);
 });
 
 test('loads the controller and connects findings to the shared inspector', () => {
