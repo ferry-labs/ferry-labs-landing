@@ -108,9 +108,9 @@ test('defines responsive workflow, capability, and artwork layouts', () => {
 test('marks Ferry Platform as the current navigation destination', () => {
   assert.match(
     html,
-    /href="ferry-platform\.html" aria-current="page">Ferry Platform<\/a>/
+    /href="\/ferry-platform" aria-current="page">Ferry Platform<\/a>/
   );
-  assert.match(html, /href="case-studies\.html">Case Studies<\/a>/);
+  assert.match(html, /href="\/case-studies">Case Studies<\/a>/);
   assert.match(html, /class="nav-cta-label">Start deployment<\/span>/);
 });
 
