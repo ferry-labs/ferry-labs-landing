@@ -56,12 +56,12 @@ export function renderFerryPlatformPage(page = PLATFORM_PAGE) {
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="index.html" aria-label="Ferry Labs home">
+    <a class="brand" href="/" aria-label="Ferry Labs home">
       <img src="ferry-logo-mark.png" alt="">
     </a>
     <nav class="site-nav" aria-label="Primary">
-      <a class="header-link" href="case-studies.html">Case Studies</a>
-      <a class="header-link" href="ferry-platform.html" aria-current="page">Ferry Platform</a>
+      <a class="header-link" href="/case-studies">Case Studies</a>
+      <a class="header-link" href="/ferry-platform" aria-current="page">Ferry Platform</a>
       <a class="nav-cta" href="${BOOKING_URL}" target="_blank" rel="noopener noreferrer">
         <span class="nav-cta-label">Start deployment</span>
         <span class="nav-cta-short">Start deployment</span>
