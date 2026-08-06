@@ -18,8 +18,8 @@ if (!template.includes('src="page-transitions.js"')) {
   );
 }
 const desiredNav = `const NAV = [
-  { label: 'Case Studies', href: 'case-studies.html' },
-  { label: 'Ferry Platform', href: 'ferry-platform.html' }
+  { label: 'Case Studies', href: '/case-studies' },
+  { label: 'Ferry Platform', href: '/ferry-platform' }
 ];`;
 template = template.replace(/const NAV = \[[\s\S]*?\];/, desiredNav);
 template = template.replace(
@@ -157,7 +157,7 @@ if (navMarkupStart < 0 || navMarkupEnd < 0) {
 
 const navMarkup = `      <div className="nav-wrap">
         <nav className="nav" aria-label="Primary">
-          <a className="brand" href="index.html" aria-label="Ferry Labs home">
+          <a className="brand" href="/" aria-label="Ferry Labs home">
             <img src="ferry-logo-mark.png" alt="" />
           </a>
           <div className="nav-links">
@@ -190,7 +190,7 @@ const heroCtaMarkup = `          <div className="cta-tiles">
                 </svg>
               </span>
             </button>
-            <a className="cta-tile secondary" href="case-studies.html">
+            <a className="cta-tile secondary" href="/case-studies">
               <span style={{ fontSize: "16px", fontFamily: "'Google Sans', 'Inter', sans-serif" }}>Case Studies</span>
               <span className="tile-arrow" aria-hidden>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
