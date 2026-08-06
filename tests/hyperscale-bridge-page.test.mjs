@@ -88,6 +88,15 @@ test('keeps one run action and explicit engineer approval', () => {
   assert.match(html, /data-action="RESET"/);
 });
 
+test('ends with Ferry branding instead of a sales CTA', () => {
+  assert.doesNotMatch(html, /Review the workflow together|mailto:/i);
+  assert.match(
+    html,
+    /<footer>[\s\S]*class="footer-brand"[\s\S]*href="https:\/\/ferrylabs\.ai\/"[\s\S]*aria-label="Ferry Labs home"/
+  );
+  assert.equal((html.match(/class="footer-brand"/g) ?? []).length, 1);
+});
+
 test('uses a responsive CSS-authored system canvas', () => {
   for (const selector of [
     '.system-canvas',
