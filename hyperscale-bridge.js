@@ -1,148 +1,179 @@
 import {
+  AGENTS,
+  CHANGE_TRACES,
   STAGES,
   createInitialState,
   transition,
 } from './hyperscale-bridge-state.mjs';
 
 const root = document.documentElement;
-const model = document.querySelector('.model-canvas');
-const statusCopy = document.querySelector('[data-status-copy]');
-const reviewStatus = document.querySelector('[data-review-status]');
-const syncIndex = document.querySelector('[data-sync-index]');
-const syncLabel = document.querySelector('[data-sync-label]');
-const syncMeter = document.querySelector('[data-sync-meter]');
-const findingTabs = [...document.querySelectorAll('[data-finding]')];
+const runStatus = document.querySelector('[data-run-status]');
+const activeAgentCopy = document.querySelector('[data-active-agent-copy]');
 const actionButtons = [...document.querySelectorAll('[data-action]')];
+const changeButtons = [...document.querySelectorAll('[data-change]')];
+const agentNodes = [...document.querySelectorAll('[data-agent]')];
+const contextNodes = [...document.querySelectorAll('[data-context-record]')];
+const impactNodes = [...document.querySelectorAll('[data-impact]')];
 
-const findingFields = {
-  label: document.querySelector('[data-finding-label]'),
-  title: document.querySelector('[data-finding-title]'),
-  description: document.querySelector('[data-finding-description]'),
-  measure: document.querySelector('[data-finding-measure]'),
-  expected: document.querySelector('[data-finding-expected]'),
-  source: document.querySelector('[data-finding-source]'),
-  constraint: document.querySelector('[data-finding-constraint]'),
+const traceFields = {
+  title: document.querySelector('[data-trace-title]'),
+  code: document.querySelector('[data-trace-code]'),
+  sourceDetail: document.querySelector('[data-trace-source]'),
+  mapping: document.querySelector('[data-trace-mapping]'),
+  constraint: document.querySelector('[data-trace-constraint]'),
+  impact: document.querySelector('[data-trace-impact]'),
+  resolution: document.querySelector('[data-trace-resolution]'),
 };
-
-const syncOperations = [
-  'Reading PCB revision C.14',
-  'Aligning shared references',
-  'Updating cabinet assembly M.08',
-  'Evaluating mechanical constraints',
-];
 
 const statusByStage = {
-  [STAGES.READY]: ['3 changes ready', 'Waiting'],
-  [STAGES.SYNCING]: ['Synchronizing', 'In progress'],
-  [STAGES.REVIEW]: ['Assembly updated', 'Review required'],
-  [STAGES.PROPOSED]: ['Return set prepared', 'Approval required'],
-  [STAGES.APPROVED]: ['Decision recorded', 'Approved'],
+  [STAGES.READY]: '3 source changes ready',
+  [STAGES.REVIEW]: '3 impacts ready for review',
+  [STAGES.PROPOSED]: 'Return set R.01 awaiting approval',
+  [STAGES.APPROVED]: 'Decision recorded in context',
 };
 
+const actionEvents = new Set([
+  'START_RUN',
+  'CREATE_PROPOSAL',
+  'APPROVE',
+  'RESET',
+]);
+
 let state = createInitialState();
-let selectedFindingId = 'cold-plate';
-let syncTimeout;
+let runTimer;
 
-function renderFinding() {
-  const finding = state.findings.find(({ id }) => id === selectedFindingId);
-  if (!finding) {
-    model.removeAttribute('data-active-part');
-    return;
-  }
+function selectedTrace() {
+  return CHANGE_TRACES.find(({ id }) => id === state.selectedChangeId);
+}
 
-  for (const [key, node] of Object.entries(findingFields)) {
-    node.textContent = finding[key];
-  }
+function renderTrace() {
+  const trace = selectedTrace();
+  if (!trace) return;
 
-  model.dataset.activePart = finding.modelPart;
-  findingTabs.forEach((tab) => {
-    tab.setAttribute(
+  traceFields.title.textContent = trace.change;
+  traceFields.code.textContent = trace.code;
+  traceFields.sourceDetail.textContent = trace.sourceDetail;
+  traceFields.mapping.textContent = trace.mapping;
+  traceFields.constraint.textContent = trace.constraint;
+  traceFields.impact.textContent = trace.impact;
+  traceFields.resolution.textContent = trace.resolution;
+
+  changeButtons.forEach((button) => {
+    button.setAttribute(
       'aria-selected',
-      String(tab.dataset.finding === selectedFindingId)
+      String(button.dataset.change === state.selectedChangeId)
+    );
+  });
+
+  impactNodes.forEach((node) => {
+    node.dataset.selected = String(
+      node.dataset.impact === state.selectedChangeId
     );
   });
 }
 
+function renderAgents() {
+  const activeAgent = AGENTS[state.activeAgentIndex];
+  root.dataset.activeAgent = activeAgent?.id ?? '';
+
+  agentNodes.forEach((node) => {
+    const agentId = node.dataset.agent;
+    const isActive = activeAgent?.id === agentId;
+    const isComplete = state.completedAgentIds.includes(agentId);
+    const agentState = isActive ? 'active' : isComplete ? 'complete' : 'queued';
+    const stateNode = node.querySelector('[data-agent-state]');
+
+    node.dataset.state = agentState;
+    stateNode.textContent =
+      agentState === 'active'
+        ? 'Working'
+        : agentState === 'complete'
+          ? 'Complete'
+          : 'Queued';
+  });
+
+  contextNodes.forEach((node) => {
+    const agent = AGENTS.find(
+      ({ contextKey }) => contextKey === node.dataset.contextRecord
+    );
+    const isActive = agent?.id === activeAgent?.id;
+    const isComplete = state.completedAgentIds.includes(agent?.id);
+    const recordState = isActive ? 'active' : isComplete ? 'complete' : 'queued';
+    const stateNode = node.querySelector('[data-record-state]');
+
+    node.dataset.state = recordState;
+    stateNode.textContent =
+      recordState === 'active'
+        ? 'Writing'
+        : recordState === 'complete'
+          ? 'Linked'
+          : 'Waiting';
+  });
+
+  if (activeAgentCopy && activeAgent) {
+    activeAgentCopy.textContent = `${activeAgent.name} is working`;
+  }
+}
+
 function render() {
   root.dataset.stage = state.stage;
-  const [bridgeCopy, reviewCopy] = statusByStage[state.stage];
-  statusCopy.textContent = bridgeCopy;
-  reviewStatus.textContent = reviewCopy;
+  renderTrace();
+  renderAgents();
+
+  const activeAgent = AGENTS[state.activeAgentIndex];
+  runStatus.textContent =
+    state.stage === STAGES.RUNNING && activeAgent
+      ? `${activeAgent.name} · ${state.activeAgentIndex + 1} of ${AGENTS.length}`
+      : statusByStage[state.stage];
 
   actionButtons.forEach((button) => {
-    button.disabled = state.stage === STAGES.SYNCING;
-  });
-
-  renderFinding();
-}
-
-function setSyncOperation(index) {
-  syncIndex.textContent = `${String(index + 1).padStart(2, '0')} / 04`;
-  syncLabel.textContent = syncOperations[index];
-  syncMeter.style.width = `${(index + 1) * 25}%`;
-
-  document.querySelectorAll('[data-sync-step]').forEach((step, stepIndex) => {
-    step.classList.toggle('is-active', stepIndex <= index);
+    button.disabled = state.stage === STAGES.RUNNING;
   });
 }
 
-function completeSynchronization() {
-  state = transition(state, 'COMPLETE_SYNC');
-  selectedFindingId = 'cold-plate';
-  render();
-}
-
-function runSynchronization() {
-  window.clearTimeout(syncTimeout);
-  state = transition(state, 'START_SYNC');
+function runAgentSequence() {
+  window.clearTimeout(runTimer);
+  state = transition(state, 'START_RUN');
   render();
 
   const reducedMotion = window.matchMedia(
     '(prefers-reduced-motion: reduce)'
   ).matches;
-  const interval = reducedMotion ? 20 : 400;
-  let operationIndex = 0;
-
-  setSyncOperation(operationIndex);
+  const interval = reducedMotion ? 30 : 420;
 
   const advance = () => {
-    operationIndex += 1;
-    if (operationIndex >= syncOperations.length) {
-      syncTimeout = window.setTimeout(completeSynchronization, interval);
-      return;
+    state = transition(state, 'ADVANCE_AGENT');
+    render();
+
+    if (state.stage === STAGES.RUNNING) {
+      runTimer = window.setTimeout(advance, interval);
     }
-    setSyncOperation(operationIndex);
-    syncTimeout = window.setTimeout(advance, interval);
   };
 
-  syncTimeout = window.setTimeout(advance, interval);
+  runTimer = window.setTimeout(advance, interval);
 }
 
 function dispatch(event) {
-  if (event === 'START_SYNC') {
-    runSynchronization();
+  if (event === 'START_RUN') {
+    runAgentSequence();
     return;
   }
 
-  window.clearTimeout(syncTimeout);
+  if (event === 'RESET') window.clearTimeout(runTimer);
   state = transition(state, event);
-
-  if (event === 'RESET') {
-    selectedFindingId = 'cold-plate';
-    setSyncOperation(0);
-  }
-
   render();
 }
 
 actionButtons.forEach((button) => {
-  button.addEventListener('click', () => dispatch(button.dataset.action));
+  button.addEventListener('click', () => {
+    const event = button.dataset.action;
+    if (actionEvents.has(event)) dispatch(event);
+  });
 });
 
-findingTabs.forEach((tab) => {
-  tab.addEventListener('click', () => {
-    selectedFindingId = tab.dataset.finding;
-    renderFinding();
+changeButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    dispatch({ type: 'SELECT_CHANGE', changeId: button.dataset.change });
   });
 });
 
