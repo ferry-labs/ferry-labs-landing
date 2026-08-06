@@ -1,104 +1,136 @@
 export const STAGES = Object.freeze({
   READY: 'ready',
-  SYNCING: 'syncing',
+  RUNNING: 'running',
   REVIEW: 'review',
   PROPOSED: 'proposed',
   APPROVED: 'approved',
 });
 
-const changes = Object.freeze([
+export const AGENTS = Object.freeze([
   Object.freeze({
-    id: 'cap-bank',
-    source: 'Altium C.14',
-    title: 'DC-link capacitor bank',
-    detail: 'Moved 18 mm toward cold plate',
+    id: 'altium',
+    name: 'Altium Change Agent',
+    action: 'Captures revision C.14 and its three changed objects.',
+    contextKey: 'revision',
   }),
   Object.freeze({
-    id: 'gate-connector',
-    source: 'Altium C.14',
-    title: 'Gate-driver connector J17',
-    detail: 'Rotated 90° clockwise',
+    id: 'mapping',
+    name: 'Context Mapping Agent',
+    action: 'Links electrical objects to mechanical geometry and rules.',
+    contextKey: 'mapping',
   }),
   Object.freeze({
-    id: 'mount-h4',
-    source: 'Altium C.14',
-    title: 'Mounting hole H4',
-    detail: 'Shifted 6 mm on X axis',
+    id: 'inventor',
+    name: 'Inventor Assembly Agent',
+    action: 'Stages the mapped geometry in assembly revision M.08.',
+    contextKey: 'geometry',
+  }),
+  Object.freeze({
+    id: 'impact',
+    name: 'Constraint & Impact Agent',
+    action: 'Evaluates clearance, access, and alignment constraints.',
+    contextKey: 'constraint',
+  }),
+  Object.freeze({
+    id: 'return',
+    name: 'Review & Return Agent',
+    action: 'Builds a traceable Altium return proposal for review.',
+    contextKey: 'decision',
   }),
 ]);
 
-const findings = Object.freeze([
+export const CHANGE_TRACES = Object.freeze([
   Object.freeze({
-    id: 'cold-plate',
+    id: 'capacitor',
+    code: 'C1',
+    change: 'Capacitor bank moved 18 mm',
+    sourceDetail: 'DC-link bank · X +18.0 mm',
+    mapping: 'Cold-plate relationship',
+    constraint: 'No physical overlap',
+    impact: '4.2 mm interference',
     severity: 'conflict',
-    label: 'Physical interference',
-    title: 'Capacitor bank intersects cold plate',
-    measure: '4.2 mm',
-    expected: 'No overlap',
-    source: 'C14 · capacitor move',
-    constraint: 'M08 · cold plate envelope',
-    description:
-      'The revised capacitor position enters the reserved cold-plate volume. Closest geometry is highlighted in the assembly.',
-    modelPart: 'capacitor',
+    resolution: 'Move capacitor bank 7 mm away from cold plate',
   }),
   Object.freeze({
-    id: 'service-access',
+    id: 'connector',
+    code: 'C2',
+    change: 'Connector J17 rotated 90°',
+    sourceDetail: 'Gate-driver connector · RZ +90°',
+    mapping: 'Service-access envelope',
+    constraint: '15 mm minimum access',
+    impact: '8 mm available',
     severity: 'review',
-    label: 'Access constraint',
-    title: 'Connector service access reduced',
-    measure: '8.0 mm',
-    expected: '≥ 15.0 mm',
-    source: 'C14 · connector rotation',
-    constraint: 'M08 · service envelope',
-    description:
-      'The rotated connector leaves insufficient room for the specified service tool. An engineer should confirm the access envelope.',
-    modelPart: 'connector',
+    resolution: 'Restore the 15 mm service envelope at J17',
   }),
   Object.freeze({
-    id: 'standoff',
+    id: 'mount',
+    code: 'C3',
+    change: 'Mounting hole H4 shifted 6 mm',
+    sourceDetail: 'Board datum H4 · X +6.0 mm',
+    mapping: 'Cabinet standoff axis',
+    constraint: '≤ 0.5 mm alignment',
+    impact: '6 mm misalignment',
     severity: 'conflict',
-    label: 'Reference mismatch',
-    title: 'Mounting hole no longer meets standoff',
-    measure: '6.0 mm',
-    expected: '≤ 0.5 mm',
-    source: 'C14 · H4 move',
-    constraint: 'M08 · standoff axis',
-    description:
-      'Hole H4 moved away from its linked mechanical reference. The proposed return change restores the shared axis.',
-    modelPart: 'mount',
+    resolution: 'Relink H4 to the Inventor standoff axis',
   }),
 ]);
 
 export function createInitialState() {
   return {
     stage: STAGES.READY,
-    changes: [...changes],
-    findings: [],
+    activeAgentIndex: -1,
+    completedAgentIds: [],
+    selectedChangeId: CHANGE_TRACES[0].id,
     approvedByEngineer: false,
   };
 }
 
 export function transition(state, event) {
-  if (event === 'RESET') return createInitialState();
+  const type = typeof event === 'string' ? event : event?.type;
 
-  const nextStage = {
-    [`${STAGES.READY}:START_SYNC`]: STAGES.SYNCING,
-    [`${STAGES.SYNCING}:COMPLETE_SYNC`]: STAGES.REVIEW,
-    [`${STAGES.REVIEW}:CREATE_PROPOSAL`]: STAGES.PROPOSED,
-    [`${STAGES.PROPOSED}:APPROVE`]: STAGES.APPROVED,
-  }[`${state.stage}:${event}`];
+  if (type === 'RESET') return createInitialState();
 
-  if (!nextStage) return state;
+  if (type === 'SELECT_CHANGE') {
+    const changeId = event?.changeId;
+    if (!CHANGE_TRACES.some(({ id }) => id === changeId)) return state;
+    if (state.selectedChangeId === changeId) return state;
+    return { ...state, selectedChangeId: changeId };
+  }
 
-  return {
-    ...state,
-    stage: nextStage,
-    findings:
-      nextStage === STAGES.REVIEW ||
-      nextStage === STAGES.PROPOSED ||
-      nextStage === STAGES.APPROVED
-        ? [...findings]
-        : state.findings,
-    approvedByEngineer: nextStage === STAGES.APPROVED,
-  };
+  if (state.stage === STAGES.READY && type === 'START_RUN') {
+    return {
+      ...state,
+      stage: STAGES.RUNNING,
+      activeAgentIndex: 0,
+      completedAgentIds: [],
+    };
+  }
+
+  if (state.stage === STAGES.RUNNING && type === 'ADVANCE_AGENT') {
+    const completedAgentIds = AGENTS.slice(0, state.activeAgentIndex + 1).map(
+      ({ id }) => id
+    );
+    const isLastAgent = state.activeAgentIndex === AGENTS.length - 1;
+
+    return {
+      ...state,
+      stage: isLastAgent ? STAGES.REVIEW : STAGES.RUNNING,
+      activeAgentIndex: isLastAgent ? -1 : state.activeAgentIndex + 1,
+      completedAgentIds,
+    };
+  }
+
+  if (state.stage === STAGES.REVIEW && type === 'CREATE_PROPOSAL') {
+    return { ...state, stage: STAGES.PROPOSED };
+  }
+
+  if (state.stage === STAGES.PROPOSED && type === 'APPROVE') {
+    return {
+      ...state,
+      stage: STAGES.APPROVED,
+      approvedByEngineer: true,
+    };
+  }
+
+  return state;
 }
