@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en" data-stage="ready">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>ECAD–MCAD Live Bridge — Ferry Labs</title>
+  <meta name="description" content="A Ferry Labs product concept for reviewing design changes across Altium Designer and Autodesk Inventor.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="hyperscale-bridge.css?v=20260805">
+  <script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="ferry-mark" href="index.html" aria-label="Ferry Labs home">
+      <img src="ferry-logo-mark.png" alt="" width="40" height="40">
+    </a>
+    <div class="product-lockup">
+      <span class="product-name">ECAD–MCAD Live Bridge</span>
+      <span class="concept-label">Product concept</span>
+    </div>
+    <div class="simulation-note">
+      <span class="simulation-dot" aria-hidden="true"></span>
+      Simulated design data
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">HSP-SST / Power Module A</p>
+        <h1 id="page-title">One design state.<br>Across ECAD and MCAD.</h1>
+      </div>
+      <p class="intro-copy">A working concept for carrying PCB changes into the cabinet assembly, testing their mechanical impact, and returning an engineer-approved adjustment to the board.</p>
+    </section>
+
+    <section class="connection-strip" aria-label="Connected design revisions">
+      <article class="source-system">
+        <div class="source-icon source-icon--pcb" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div>
+          <span class="system-kicker">Electrical source</span>
+          <strong>Altium Designer</strong>
+          <span class="revision">PCB revision C.14</span>
+        </div>
+      </article>
+      <div class="bridge-status" aria-live="polite">
+        <span class="bridge-line" aria-hidden="true"></span>
+        <span class="bridge-status-copy" data-status-copy>3 changes ready</span>
+        <span class="bridge-line" aria-hidden="true"></span>
+      </div>
+      <article class="source-system source-system--right">
+        <div class="source-icon source-icon--cad" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div>
+          <span class="system-kicker">Mechanical source</span>
+          <strong>Autodesk Inventor</strong>
+          <span class="revision">Assembly revision M.08</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="workbench" aria-label="Design synchronization workbench">
+      <aside class="revision-panel panel">
+        <div class="panel-heading">
+          <div>
+            <span class="panel-index">01</span>
+            <h2>Source changes</h2>
+          </div>
+          <span class="count">03</span>
+        </div>
+
+        <ol class="change-list">
+          <li class="change-row" data-change="cap-bank">
+            <span class="change-number">C1</span>
+            <div>
+              <strong>DC-link capacitor bank</strong>
+              <span>Moved 18 mm toward cold plate</span>
+            </div>
+            <span class="change-state" aria-label="Changed"></span>
+          </li>
+          <li class="change-row" data-change="gate-connector">
+            <span class="change-number">C2</span>
+            <div>
+              <strong>Gate-driver connector J17</strong>
+              <span>Rotated 90° clockwise</span>
+            </div>
+            <span class="change-state" aria-label="Changed"></span>
+          </li>
+          <li class="change-row" data-change="mount-h4">
+            <span class="change-number">C3</span>
+            <div>
+              <strong>Mounting hole H4</strong>
+              <span>Shifted 6 mm on X axis</span>
+            </div>
+            <span class="change-state" aria-label="Changed"></span>
+          </li>
+        </ol>
+
+        <div class="revision-meta">
+          <div><span>Modified</span><strong>Today, 09:42</strong></div>
+          <div><span>Author</span><strong>Power electronics</strong></div>
+          <div><span>Workspace</span><strong>Prototype / C-series</strong></div>
+        </div>
+
+        <button class="primary-action when-ready" type="button" data-action="START_SYNC">
+          <span>Synchronize revision</span>
+          <span aria-hidden="true">→</span>
+        </button>
+        <button class="text-action when-not-ready" type="button" data-action="RESET">Reset concept</button>
+      </aside>
+
+      <section class="model-panel panel" aria-labelledby="assembly-heading">
+        <div class="panel-heading model-heading">
+          <div>
+            <span class="panel-index">02</span>
+            <h2 id="assembly-heading">Assembly impact</h2>
+          </div>
+          <span class="view-control" aria-label="Isometric model view">ISO VIEW</span>
+        </div>
+
+        <div class="model-canvas" data-model-part="cabinet">
+          <div class="axis axis--x"><span>X</span></div>
+          <div class="axis axis--y"><span>Y</span></div>
+          <div class="axis axis--z"><span>Z</span></div>
+
+          <div class="cabinet-frame" aria-label="Simplified solid-state transformer cabinet model">
+            <div class="cabinet-label">CAB-01 / MODULE A</div>
+            <div class="rail rail--left"></div>
+            <div class="rail rail--right"></div>
+            <div class="cold-plate" data-model-part="cold-plate">
+              <span>COLD PLATE</span>
+              <i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <div class="pcb" data-model-part="pcb">
+              <span class="pcb-label">PCB-A1 · C.14</span>
+              <div class="trace trace--one"></div>
+              <div class="trace trace--two"></div>
+              <div class="trace trace--three"></div>
+              <div class="capacitor-bank" data-model-part="capacitor">
+                <i></i><i></i><i></i><i></i>
+              </div>
+              <div class="connector" data-model-part="connector"><i></i><i></i><i></i></div>
+              <div class="mount-point mount-point--one"></div>
+              <div class="mount-point mount-point--two"></div>
+              <div class="mount-point mount-point--three"></div>
+              <div class="mount-point mount-point--four" data-model-part="mount"></div>
+            </div>
+            <div class="standoff-target" aria-hidden="true"></div>
+            <div class="dimension dimension--collision"><span>4.2 mm overlap</span></div>
+            <div class="dimension dimension--access"><span>8.0 / 15.0 mm</span></div>
+            <div class="dimension dimension--mount"><span>ΔX 6 mm</span></div>
+          </div>
+
+          <div class="sync-overlay" aria-live="polite">
+            <div class="sync-readout">
+              <span class="sync-index" data-sync-index>01 / 04</span>
+              <strong data-sync-label>Reading PCB revision C.14</strong>
+              <span class="sync-meter"><i data-sync-meter></i></span>
+            </div>
+          </div>
+
+          <div class="model-footer">
+            <span>Units · mm</span>
+            <span>Coordinate system · CAB-01</span>
+            <span>Geometry · simplified</span>
+          </div>
+        </div>
+      </section>
+
+      <aside class="review-panel panel">
+        <div class="panel-heading">
+          <div>
+            <span class="panel-index">03</span>
+            <h2>Engineering review</h2>
+          </div>
+          <span class="review-status" data-review-status>Waiting</span>
+        </div>
+
+        <div class="empty-review when-ready">
+          <span class="empty-mark" aria-hidden="true">⌁</span>
+          <strong>No assembly analysis yet</strong>
+          <p>Synchronize the electrical revision to evaluate its effect on the current cabinet model.</p>
+        </div>
+
+        <div class="sync-steps when-syncing" aria-label="Synchronization progress">
+          <div class="sync-step" data-sync-step="0"><span>01</span>Read electrical revision</div>
+          <div class="sync-step" data-sync-step="1"><span>02</span>Align shared references</div>
+          <div class="sync-step" data-sync-step="2"><span>03</span>Update cabinet assembly</div>
+          <div class="sync-step" data-sync-step="3"><span>04</span>Evaluate constraints</div>
+        </div>
+
+        <div class="review-content when-review">
+          <div class="finding-summary">
+            <span><strong>2</strong> conflicts</span>
+            <span><strong>1</strong> review item</span>
+          </div>
+
+          <div class="finding-tabs" role="tablist" aria-label="Assembly findings">
+            <button type="button" role="tab" aria-selected="true" data-finding="cold-plate">F01</button>
+            <button type="button" role="tab" aria-selected="false" data-finding="service-access">F02</button>
+            <button type="button" role="tab" aria-selected="false" data-finding="standoff">F03</button>
+          </div>
+
+          <article class="finding-detail" aria-live="polite">
+            <span class="finding-type" data-finding-label>Physical interference</span>
+            <h3 data-finding-title>Capacitor bank intersects cold plate</h3>
+            <p data-finding-description>The revised capacitor position enters the reserved cold-plate volume. Closest geometry is highlighted in the assembly.</p>
+            <dl class="finding-measures">
+              <div><dt>Measured</dt><dd data-finding-measure>4.2 mm</dd></div>
+              <div><dt>Required</dt><dd data-finding-expected>No overlap</dd></div>
+            </dl>
+            <div class="traceability">
+              <div><span>Electrical source</span><strong data-finding-source>C14 · capacitor move</strong></div>
+              <div><span>Mechanical constraint</span><strong data-finding-constraint>M08 · cold plate envelope</strong></div>
+            </div>
+          </article>
+
+          <button class="primary-action when-review-only" type="button" data-action="CREATE_PROPOSAL">
+            <span>Prepare return change</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <div class="proposal when-proposed">
+          <div class="proposal-heading">
+            <span>Proposed Altium update</span>
+            <strong>Return set R.01</strong>
+          </div>
+          <ol>
+            <li><span>01</span>Move capacitor bank 7 mm away from cold plate</li>
+            <li><span>02</span>Restore 15 mm service envelope at J17</li>
+            <li><span>03</span>Relink H4 to Inventor standoff axis</li>
+          </ol>
+          <div class="approval-gate">
+            <span class="lock-mark" aria-hidden="true"></span>
+            <div><strong>Engineer approval required</strong><span>No source design is changed automatically.</span></div>
+          </div>
+          <button class="primary-action" type="button" data-action="APPROVE">
+            <span>Approve return change</span>
+            <span aria-hidden="true">✓</span>
+          </button>
+        </div>
+
+        <div class="approved-state when-approved">
+          <span class="approved-mark" aria-hidden="true">✓</span>
+          <span class="finding-type">Decision recorded</span>
+          <h3>Return change approved</h3>
+          <p>R.01 is ready for the electrical designer to inspect in Altium. The original revision and every affected constraint remain linked.</p>
+          <div class="ledger">
+            <div><span>Decision</span><strong>Approved for review</strong></div>
+            <div><span>Design state</span><strong>C.14 + M.08</strong></div>
+            <div><span>Record</span><strong>CR-2026-081</strong></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="principle-strip" aria-label="Product principles">
+      <div><span>01</span><strong>Detect</strong><p>Watch both design systems for revision-level changes.</p></div>
+      <div><span>02</span><strong>Evaluate</strong><p>Run explicit mechanical constraints against shared geometry.</p></div>
+      <div><span>03</span><strong>Return</strong><p>Translate findings into reviewable changes for the source tool.</p></div>
+      <div><span>04</span><strong>Remember</strong><p>Preserve the evidence and engineer decision with each revision.</p></div>
+    </section>
+
+    <section class="final-cta">
+      <div>
+        <p class="eyebrow">Next step</p>
+        <h2>Does this match the way your team actually works?</h2>
+        <p>This concept models the loop from our conversation. A short session with the engineer doing the work will tell us what should be connected, checked, and kept under human control.</p>
+      </div>
+      <a href="mailto:contact@ferrylabs.ai?subject=Hyperscale%20Power%20design%20workflow">
+        <span>Review with your design engineer</span>
+        <span aria-hidden="true">↗</span>
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    <span>Ferry Labs · San Francisco</span>
+    <span>Concept prepared from the August 2026 discussion</span>
+  </footer>
+  <script type="module" src="hyperscale-bridge.js?v=20260805"></script>
+</body>
+</html>
