@@ -26,42 +26,59 @@ The prototype does not assume that existing ECAD–MCAD products solve or fail t
 
 ## Experience
 
-The page opens with a concise explanation of the business and engineering case before the interactive workflow. It must answer four questions without requiring Daniel to infer them from the interface:
+The visualization is the prototype. The page removes the separate editorial briefing, dense CAD-style workspace, and repeated Ferry-method section in favor of one interactive system canvas that answers four questions in a single view:
 
-1. **Problem:** electrical and mechanical changes cross a manual STEP-based handoff, so engineers spend time exporting, importing, checking fit, and translating changes back into the source design.
-2. **Systems:** Altium Designer remains the electrical source of truth, Autodesk Inventor remains the mechanical source of truth, and Ferry provides the controlled coordination layer between them.
-3. **What Ferry builds:** revision detection, geometry normalization, explicit constraint evaluation, reviewable return changes, engineer approval, and a traceable decision record.
-4. **Outcome:** fewer manual handoffs, earlier conflict detection, shorter iteration cycles, and engineering knowledge that persists across revisions.
+1. What changed in Altium?
+2. Where does Ferry sit between the systems?
+3. Which agents act on the change, and what does each one do?
+4. What mechanical impact and engineer-controlled return change result?
 
-The page must not use the label `HSP-SST / Power Module A`. The interactive workspace begins with a neutral `Design coordination workspace` label and compares PCB revision C.14 with cabinet assembly revision M.08.
+The canvas places **Altium Designer** on the left, the **Ferry Unified Engineering Context Layer** in the center, and **Autodesk Inventor** on the right. Ferry must be the visual and conceptual center of the system—not a thin arrow or generic automation label.
 
-The experience has four states:
+The Altium source begins with revision C.14 and the three changes that trigger the workflow:
 
-1. **Ready:** A compact change summary identifies three Altium changes waiting to be synchronized.
-2. **Synchronizing:** A short progress sequence shows design extraction, geometry alignment, and constraint evaluation.
-3. **Review:** The cabinet visualization highlights one hard conflict and one advisory finding. The details show the exact source change, measured impact, and affected mechanical constraint.
-4. **Proposed return change:** The user can create and approve a suggested PCB adjustment for Altium. The approval is visibly human-controlled.
+- DC-link capacitor bank moved 18 mm;
+- gate-driver connector J17 rotated 90 degrees;
+- mounting hole H4 shifted 6 mm.
 
-The final panel invites Daniel to review the workflow with his design engineer.
+Each source change remains selectable and traceable through its full path:
 
-Explanations are also woven into the interactive workspace. Each region states what Ferry is coordinating and why it matters: detecting source changes, evaluating cross-system consequences, translating findings into source-native work, and keeping the engineer in control.
+`source change → mapped object → applicable constraint → measured impact → proposed resolution`
 
-After the workspace, a compact **Why Ferry** section explains the engagement model: map the real workflow with engineers, connect the tools already in use, encode company-specific rules, validate the loop on a narrow pilot, and retain the resulting decisions as reusable operating knowledge. It should make Ferry's value legible without generic AI positioning or claims that the integration is already complete.
+The named working agents are:
+
+1. **Altium Change Agent:** captures the revision-level change set and provenance.
+2. **Context Mapping Agent:** links Altium objects to corresponding Inventor geometry and relevant constraints.
+3. **Inventor Assembly Agent:** stages the mapped geometry update in the mechanical assembly context.
+4. **Constraint & Impact Agent:** evaluates explicit clearance, service-access, and alignment rules.
+5. **Review & Return Agent:** assembles a source-native return proposal and routes it through engineer approval.
+
+The context layer visibly accumulates five kinds of structured context as the workflow runs: object identities, revision changes, geometry mappings, design constraints, and decisions with provenance.
+
+The user has one primary action, `Run design coordination`. The system progresses through the five agents, visually marking the active agent and adding context records. The resulting impact view preserves the existing simulated findings:
+
+- capacitor move → cold-plate relationship → 4.2 mm interference;
+- connector rotation → service-access envelope → 8 mm available vs. 15 mm required;
+- H4 shift → cabinet standoff axis → 6 mm misalignment.
+
+The Review & Return Agent produces a proposed Altium change set. The engineer explicitly approves or rejects it; nothing writes to a source design automatically. After approval, Ferry adds the decision and revision lineage to the context layer.
+
+The canvas concludes with one restrained outcome statement and the existing review CTA. It must be understandable before interaction, while the animated run demonstrates how the system behaves.
 
 ## Interface design
 
-The visual direction is precise European industrial software, not a generic AI dashboard:
+The visual direction is precise European industrial systems architecture, not a generic AI dashboard:
 
 - warm off-white canvas, graphite typography, restrained signal colors;
 - compact technical labels and tabular numerals;
 - thin rules, deliberate spacing, and almost no decorative shadows;
 - no gradients, glass effects, oversized pills, chat interface, sparkle iconography, or generic AI copy;
-- a bespoke CSS-authored cutaway of the cabinet and PCB, with dimensional annotations and highlighted change geometry;
+- a bespoke CSS-authored system canvas with directional rails, structured change packets, agent states, context records, and a compact mechanical-impact model;
 - Ferry branding is quiet and secondary to the engineering workflow.
 
-The revision should increase polish through stronger typographic hierarchy, more whitespace, cleaner section transitions, a restrained black-and-brass palette, consistent border weights, and editorially concise copy. It must feel like a considered engineering product narrative rather than a dashboard assembled from interchangeable cards.
+The page uses a restrained black-and-brass palette, consistent one-pixel rules, compact agent-status treatments, and editorially concise copy. Agents are named system workers, not characters: no avatars, robot illustrations, chat bubbles, sparkles, or anthropomorphic animation.
 
-Desktop uses a three-region workspace: revision context, visual assembly, and impact review. Mobile stacks the same regions without removing the core interaction.
+Desktop presents the source system, Ferry layer, and target system on one horizontal architecture canvas, with agents arranged along the data path. Mobile stacks the same system vertically in source-to-context-to-target order and preserves the trace from each source change to its result.
 
 ## Simulated scenario
 
@@ -96,7 +113,7 @@ Verification covers:
 - clear simulated-data disclosure;
 - keyboard-accessible buttons and visible focus states;
 - copy review for unsupported claims and AI clichés.
-- explicit coverage of the problem, systems, Ferry build scope, engineering outcome, and Ferry engagement model;
+- explicit coverage of the two source systems, Ferry context layer, five named agents, three triggering changes, mapped constraints, measured impacts, return proposal, and engineer approval;
 - absence of the removed `HSP-SST / Power Module A` label.
 
 ## Follow-up email
