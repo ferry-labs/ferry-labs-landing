@@ -47,7 +47,7 @@ test('preserves the current conversion content and booking destination', () => {
   );
   assert.match(template, /"ctaLabel": "Start deployment"/);
   assert.match(template, /<button className="cta-tile primary"[\s\S]*?>Start deployment<\/span>/);
-  assert.match(template, /className="cta-tile secondary" href="case-studies\.html"/);
+  assert.match(template, /className="cta-tile secondary" href="\/case-studies"/);
   assert.match(template, /https:\/\/calendar\.app\.google\/t69X39w3jLLAKn3L7/);
   assert.match(template, /className="meta-strip"/);
   assert.match(template, /Ferry Labs, San Francisco/);
@@ -127,7 +127,7 @@ test('renders the Ferry logo as a standalone sticky navigation button', () => {
 test('links Ferry Platform to the dedicated platform page', () => {
   assert.match(
     template,
-    /label:\s*'Ferry Platform',[\s\S]*?href:\s*'ferry-platform\.html'/
+    /label:\s*'Ferry Platform',[\s\S]*?href:\s*'\/ferry-platform'/
   );
   assert.doesNotMatch(template, /case-studies\.html#selected-case-study/);
 });
