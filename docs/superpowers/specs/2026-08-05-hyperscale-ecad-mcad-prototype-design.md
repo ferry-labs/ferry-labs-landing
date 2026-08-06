@@ -26,7 +26,14 @@ The prototype does not assume that existing ECAD–MCAD products solve or fail t
 
 ## Experience
 
-The page opens directly into a working project named `HSP-SST / Power Module A`, comparing PCB revision C.14 with cabinet assembly revision M.08.
+The page opens with a concise explanation of the business and engineering case before the interactive workflow. It must answer four questions without requiring Daniel to infer them from the interface:
+
+1. **Problem:** electrical and mechanical changes cross a manual STEP-based handoff, so engineers spend time exporting, importing, checking fit, and translating changes back into the source design.
+2. **Systems:** Altium Designer remains the electrical source of truth, Autodesk Inventor remains the mechanical source of truth, and Ferry provides the controlled coordination layer between them.
+3. **What Ferry builds:** revision detection, geometry normalization, explicit constraint evaluation, reviewable return changes, engineer approval, and a traceable decision record.
+4. **Outcome:** fewer manual handoffs, earlier conflict detection, shorter iteration cycles, and engineering knowledge that persists across revisions.
+
+The page must not use the label `HSP-SST / Power Module A`. The interactive workspace begins with a neutral `Design coordination workspace` label and compares PCB revision C.14 with cabinet assembly revision M.08.
 
 The experience has four states:
 
@@ -36,6 +43,10 @@ The experience has four states:
 4. **Proposed return change:** The user can create and approve a suggested PCB adjustment for Altium. The approval is visibly human-controlled.
 
 The final panel invites Daniel to review the workflow with his design engineer.
+
+Explanations are also woven into the interactive workspace. Each region states what Ferry is coordinating and why it matters: detecting source changes, evaluating cross-system consequences, translating findings into source-native work, and keeping the engineer in control.
+
+After the workspace, a compact **Why Ferry** section explains the engagement model: map the real workflow with engineers, connect the tools already in use, encode company-specific rules, validate the loop on a narrow pilot, and retain the resulting decisions as reusable operating knowledge. It should make Ferry's value legible without generic AI positioning or claims that the integration is already complete.
 
 ## Interface design
 
@@ -47,6 +58,8 @@ The visual direction is precise European industrial software, not a generic AI d
 - no gradients, glass effects, oversized pills, chat interface, sparkle iconography, or generic AI copy;
 - a bespoke CSS-authored cutaway of the cabinet and PCB, with dimensional annotations and highlighted change geometry;
 - Ferry branding is quiet and secondary to the engineering workflow.
+
+The revision should increase polish through stronger typographic hierarchy, more whitespace, cleaner section transitions, a restrained black-and-brass palette, consistent border weights, and editorially concise copy. It must feel like a considered engineering product narrative rather than a dashboard assembled from interchangeable cards.
 
 Desktop uses a three-region workspace: revision context, visual assembly, and impact review. Mobile stacks the same regions without removing the core interaction.
 
@@ -83,6 +96,8 @@ Verification covers:
 - clear simulated-data disclosure;
 - keyboard-accessible buttons and visible focus states;
 - copy review for unsupported claims and AI clichés.
+- explicit coverage of the problem, systems, Ferry build scope, engineering outcome, and Ferry engagement model;
+- absence of the removed `HSP-SST / Power Module A` label.
 
 ## Follow-up email
 
