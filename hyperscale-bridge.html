@@ -7,7 +7,7 @@
   <title>ECAD–MCAD Live Bridge — Ferry Labs</title>
   <meta name="description" content="A Ferry Labs product concept for reviewing design changes across Altium Designer and Autodesk Inventor.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="hyperscale-bridge.css?v=20260805">
+  <link rel="stylesheet" href="hyperscale-bridge.css?v=20260805-story">
   <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -28,10 +28,53 @@
   <main>
     <section class="intro" aria-labelledby="page-title">
       <div>
-        <p class="eyebrow">HSP-SST / Power Module A</p>
+        <p class="eyebrow">Design coordination workspace</p>
         <h1 id="page-title">One design state.<br>Across ECAD and MCAD.</h1>
       </div>
-      <p class="intro-copy">A working concept for carrying PCB changes into the cabinet assembly, testing their mechanical impact, and returning an engineer-approved adjustment to the board.</p>
+      <p class="intro-copy">A controlled coordination layer between electrical and mechanical design—built around the tools engineers already trust.</p>
+    </section>
+
+    <section class="story-brief" aria-label="Product concept overview">
+      <article class="brief-item brief-item--problem">
+        <span class="brief-index">01</span>
+        <div>
+          <p class="brief-label">The problem</p>
+          <h2>Design intent gets lost in the handoff.</h2>
+          <p>Every PCB or cabinet change crosses a manual STEP-file loop: export, import, inspect, explain, and repeat. Engineers spend time reconciling models instead of resolving the design.</p>
+        </div>
+      </article>
+      <article class="brief-item">
+        <span class="brief-index">02</span>
+        <div>
+          <p class="brief-label">Systems in the loop</p>
+          <h2>Keep each source of truth intact.</h2>
+          <p><strong>Altium Designer</strong> owns the electrical design. <strong>Autodesk Inventor</strong> owns the mechanical assembly. Ferry becomes the coordination layer between them—not another CAD system.</p>
+        </div>
+      </article>
+      <article class="brief-item">
+        <span class="brief-index">03</span>
+        <div>
+          <p class="brief-label">What Ferry builds</p>
+          <h2>A governed, bidirectional design loop.</h2>
+          <p>Detect revisions, align geometry, evaluate company-specific design rules, translate impacts into source-native changes, and require engineer approval before anything returns.</p>
+        </div>
+      </article>
+      <article class="brief-item brief-item--outcome">
+        <span class="brief-index">04</span>
+        <div>
+          <p class="brief-label">Engineering outcome</p>
+          <h2>Find conflicts while they are still cheap to resolve.</h2>
+          <p>Fewer manual handoffs. Earlier mechanical feedback. A traceable decision record. More engineering time spent improving the product instead of maintaining the translation layer.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="workflow-intro" aria-labelledby="workflow-title">
+      <div>
+        <p class="eyebrow">How it would work</p>
+        <h2 id="workflow-title">A change moves across systems.<br>The engineer stays in control.</h2>
+      </div>
+      <p>This simulation shows the narrow loop Ferry would validate first: one electrical revision, its mechanical consequences, and a reviewable return change.</p>
     </section>
 
     <section class="connection-strip" aria-label="Connected design revisions">
@@ -67,6 +110,8 @@
           </div>
           <span class="count">03</span>
         </div>
+
+        <p class="workflow-context"><span>Ferry detects</span> the revision and preserves the source, author, and changed geometry before any translation occurs.</p>
 
         <ol class="change-list">
           <li class="change-row" data-change="cap-bank">
@@ -116,6 +161,8 @@
           </div>
           <span class="view-control" aria-label="Isometric model view">ISO VIEW</span>
         </div>
+
+        <p class="workflow-context"><span>Ferry evaluates</span> the update inside the current assembly using explicit geometry and mechanical constraints.</p>
 
         <div class="model-canvas" data-model-part="cabinet">
           <div class="axis axis--x"><span>X</span></div>
@@ -174,6 +221,8 @@
           </div>
           <span class="review-status" data-review-status>Waiting</span>
         </div>
+
+        <p class="workflow-context"><span>Ferry returns</span> the finding as traceable engineering work—not a black-box edit—and keeps final authority with the engineer.</p>
 
         <div class="empty-review when-ready">
           <span class="empty-mark" aria-hidden="true">⌁</span>
@@ -254,18 +303,41 @@
       </aside>
     </section>
 
-    <section class="principle-strip" aria-label="Product principles">
-      <div><span>01</span><strong>Detect</strong><p>Watch both design systems for revision-level changes.</p></div>
-      <div><span>02</span><strong>Evaluate</strong><p>Run explicit mechanical constraints against shared geometry.</p></div>
-      <div><span>03</span><strong>Return</strong><p>Translate findings into reviewable changes for the source tool.</p></div>
-      <div><span>04</span><strong>Remember</strong><p>Preserve the evidence and engineer decision with each revision.</p></div>
+    <section class="ferry-method" aria-labelledby="ferry-method-title">
+      <div class="method-intro">
+        <p class="eyebrow">Why Ferry</p>
+        <h2 id="ferry-method-title">The integration follows the engineering work.</h2>
+        <p>We do not begin with a generic automation layer. We begin with the engineers, the handoffs they manage, and the decisions that matter—then build narrowly around the existing engineering tools.</p>
+      </div>
+      <ol class="method-steps">
+        <li>
+          <span>01</span>
+          <div><strong>Map the real workflow</strong><p>Trace one representative change with the people doing the work: inputs, checks, exceptions, and approval boundaries.</p></div>
+        </li>
+        <li>
+          <span>02</span>
+          <div><strong>Connect the systems in place</strong><p>Integrate at controlled boundaries so Altium and Inventor remain the systems of record.</p></div>
+        </li>
+        <li>
+          <span>03</span>
+          <div><strong>Encode engineering judgment</strong><p>Turn company-specific design rules and expert corrections into explicit, testable checks.</p></div>
+        </li>
+        <li>
+          <span>04</span>
+          <div><strong>Prove a narrow loop</strong><p>Validate one module and a known set of changes before expanding—leaving behind a reusable decision trail.</p></div>
+        </li>
+      </ol>
+      <div class="method-outcome">
+        <span>What this unlocks</span>
+        <p>Engineers can move faster without surrendering control, while the organization retains the reasoning behind each design decision.</p>
+      </div>
     </section>
 
     <section class="final-cta">
       <div>
         <p class="eyebrow">Next step</p>
         <h2>Does this match the way your team actually works?</h2>
-        <p>This concept models the loop from our conversation. A short session with the engineer doing the work will tell us what should be connected, checked, and kept under human control.</p>
+        <p>This concept models the loop from our conversation. A short working session will tell us where the manual translation remains, which checks matter most, and what a narrow pilot should prove.</p>
       </div>
       <a href="mailto:contact@ferrylabs.ai?subject=Hyperscale%20Power%20design%20workflow">
         <span>Review with your design engineer</span>
