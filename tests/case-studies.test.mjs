@@ -155,14 +155,14 @@ const landingTemplate = JSON.parse(landingMatch[1]);
 
 test('links to case studies without changing landing conversion copy', () => {
   assert.match(landingTemplate, /label:\s*'Case Studies'/);
-  assert.match(landingTemplate, /href:\s*'case-studies\.html'/);
+  assert.match(landingTemplate, /href:\s*'\/case-studies'/);
   assert.match(landingTemplate, /label:\s*'Ferry Platform'/);
   assert.match(landingTemplate, /className="nav-cta"/);
   assert.match(landingTemplate, /nav-cta-short">Start deployment/);
   assert.match(landingTemplate, /AI for the companies building the physical future\./);
   assert.match(landingTemplate, /"ctaLabel": "Start deployment"/);
   assert.match(landingTemplate, /<button className="cta-tile primary"[\s\S]*?>Start deployment<\/span>/);
-  assert.match(landingTemplate, /className="cta-tile secondary" href="case-studies\.html"/);
+  assert.match(landingTemplate, /className="cta-tile secondary" href="\/case-studies"/);
   assert.match(landingTemplate, /width:\s*240px/);
   assert.match(landingTemplate, /Ferry Labs, San Francisco/);
 });
@@ -170,6 +170,6 @@ test('links to case studies without changing landing conversion copy', () => {
 test('links the case-study navigation to the dedicated platform page', () => {
   assert.match(
     html,
-    /class="header-link" href="ferry-platform\.html">Ferry Platform<\/a>/
+    /class="header-link" href="\/ferry-platform">Ferry Platform<\/a>/
   );
 });
