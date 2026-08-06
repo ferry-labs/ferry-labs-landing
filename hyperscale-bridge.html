@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>ECAD–MCAD Live Bridge — Ferry Labs</title>
-  <meta name="description" content="A Ferry Labs product concept for reviewing design changes across Altium Designer and Autodesk Inventor.">
+  <title>Engineering Context Layer — Ferry Labs</title>
+  <meta name="description" content="A Ferry Labs product concept for coordinating revision context across Altium Designer and Autodesk Inventor.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="hyperscale-bridge.css?v=20260805-story">
+  <link rel="stylesheet" href="hyperscale-bridge.css?v=20260805-context">
   <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -16,7 +16,7 @@
       <img src="ferry-logo-mark.png" alt="" width="40" height="40">
     </a>
     <div class="product-lockup">
-      <span class="product-name">ECAD–MCAD Live Bridge</span>
+      <span class="product-name">Engineering Context Layer</span>
       <span class="concept-label">Product concept</span>
     </div>
     <div class="simulation-note">
@@ -28,321 +28,222 @@
   <main>
     <section class="intro" aria-labelledby="page-title">
       <div>
-        <p class="eyebrow">Design coordination workspace</p>
-        <h1 id="page-title">One design state.<br>Across ECAD and MCAD.</h1>
+        <p class="eyebrow">Where Ferry sits</p>
+        <h1 id="page-title">The context between<br>engineering systems.</h1>
       </div>
-      <p class="intro-copy">A controlled coordination layer between electrical and mechanical design—built around the tools engineers already trust.</p>
-    </section>
-
-    <section class="story-brief" aria-label="Product concept overview">
-      <article class="brief-item brief-item--problem">
-        <span class="brief-index">01</span>
-        <div>
-          <p class="brief-label">The problem</p>
-          <h2>Design intent gets lost in the handoff.</h2>
-          <p>Every PCB or cabinet change crosses a manual STEP-file loop: export, import, inspect, explain, and repeat. Engineers spend time reconciling models instead of resolving the design.</p>
+      <div class="intro-copy">
+        <p>Altium knows the board. Inventor knows the assembly. Ferry carries the change, relationships, constraints, and decisions between them.</p>
+        <div class="source-truth-note">
+          <span>Systems of record remain unchanged</span>
+          <strong>Ferry coordinates. Engineers decide.</strong>
         </div>
-      </article>
-      <article class="brief-item">
-        <span class="brief-index">02</span>
-        <div>
-          <p class="brief-label">Systems in the loop</p>
-          <h2>Keep each source of truth intact.</h2>
-          <p><strong>Altium Designer</strong> owns the electrical design. <strong>Autodesk Inventor</strong> owns the mechanical assembly. Ferry becomes the coordination layer between them—not another CAD system.</p>
-        </div>
-      </article>
-      <article class="brief-item">
-        <span class="brief-index">03</span>
-        <div>
-          <p class="brief-label">What Ferry builds</p>
-          <h2>A governed, bidirectional design loop.</h2>
-          <p>Detect revisions, align geometry, evaluate company-specific design rules, translate impacts into source-native changes, and require engineer approval before anything returns.</p>
-        </div>
-      </article>
-      <article class="brief-item brief-item--outcome">
-        <span class="brief-index">04</span>
-        <div>
-          <p class="brief-label">Engineering outcome</p>
-          <h2>Find conflicts while they are still cheap to resolve.</h2>
-          <p>Fewer manual handoffs. Earlier mechanical feedback. A traceable decision record. More engineering time spent improving the product instead of maintaining the translation layer.</p>
-        </div>
-      </article>
-    </section>
-
-    <section class="workflow-intro" aria-labelledby="workflow-title">
-      <div>
-        <p class="eyebrow">How it would work</p>
-        <h2 id="workflow-title">A change moves across systems.<br>The engineer stays in control.</h2>
       </div>
-      <p>This simulation shows the narrow loop Ferry would validate first: one electrical revision, its mechanical consequences, and a reviewable return change.</p>
     </section>
 
-    <section class="connection-strip" aria-label="Connected design revisions">
-      <article class="source-system">
-        <div class="source-icon source-icon--pcb" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <section class="system-canvas" aria-labelledby="canvas-title">
+      <header class="canvas-header">
         <div>
-          <span class="system-kicker">Electrical source</span>
-          <strong>Altium Designer</strong>
-          <span class="revision">PCB revision C.14</span>
+          <p class="eyebrow">Interactive system view</p>
+          <h2 id="canvas-title">Follow a design change through the complete loop.</h2>
         </div>
-      </article>
-      <div class="bridge-status" aria-live="polite">
-        <span class="bridge-line" aria-hidden="true"></span>
-        <span class="bridge-status-copy" data-status-copy>3 changes ready</span>
-        <span class="bridge-line" aria-hidden="true"></span>
+        <div class="canvas-control">
+          <span class="run-status" data-run-status>3 source changes ready</span>
+          <button class="run-action when-ready" type="button" data-action="START_RUN">
+            <span>Run design coordination</span>
+            <span aria-hidden="true">→</span>
+          </button>
+          <button class="reset-action when-not-ready" type="button" data-action="RESET">Reset run</button>
+        </div>
+      </header>
+
+      <div class="architecture" aria-label="Altium to Ferry to Inventor architecture">
+        <article class="system-node source-node" aria-labelledby="source-title">
+          <div class="node-heading">
+            <span class="node-index">01 / SOURCE</span>
+            <span class="node-state"><i></i> Revision detected</span>
+          </div>
+          <div class="system-identity">
+            <div class="system-glyph system-glyph--pcb" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <div>
+              <span>Electrical source of truth</span>
+              <h3 id="source-title">Altium Designer</h3>
+              <p>PCB revision C.14</p>
+            </div>
+          </div>
+
+          <div class="trigger-heading">
+            <span>Changes that triggered the workflow</span>
+            <strong>03</strong>
+          </div>
+          <div class="change-packet" role="tablist" aria-label="Altium source changes">
+            <button type="button" role="tab" aria-selected="true" data-change="capacitor">
+              <span>C1</span>
+              <div><strong>Capacitor bank moved 18 mm</strong><small>DC-link bank · X +18.0 mm</small></div>
+              <i aria-hidden="true"></i>
+            </button>
+            <button type="button" role="tab" aria-selected="false" data-change="connector">
+              <span>C2</span>
+              <div><strong>Connector J17 rotated 90°</strong><small>Gate-driver connector · RZ +90°</small></div>
+              <i aria-hidden="true"></i>
+            </button>
+            <button type="button" role="tab" aria-selected="false" data-change="mount">
+              <span>C3</span>
+              <div><strong>Mounting hole H4 shifted 6 mm</strong><small>Board datum H4 · X +6.0 mm</small></div>
+              <i aria-hidden="true"></i>
+            </button>
+          </div>
+        </article>
+
+        <section class="context-core" aria-labelledby="context-title">
+          <div class="context-flag"><span>FERRY</span><i aria-hidden="true"></i></div>
+          <p class="node-index">02 / COORDINATION LAYER</p>
+          <h3 id="context-title">Ferry Unified Engineering Context Layer</h3>
+          <p class="context-description">A live, governed model of what changed, what it maps to, which rules apply, and what the engineer decided.</p>
+
+          <div class="context-records" aria-label="Structured engineering context">
+            <div data-context-record="revision"><i></i><span>Revision changes</span><strong data-record-state>Waiting</strong></div>
+            <div data-context-record="mapping"><i></i><span>Object identities</span><strong data-record-state>Waiting</strong></div>
+            <div data-context-record="geometry"><i></i><span>Geometry mappings</span><strong data-record-state>Waiting</strong></div>
+            <div data-context-record="constraint"><i></i><span>Design constraints</span><strong data-record-state>Waiting</strong></div>
+            <div data-context-record="decision"><i></i><span>Decisions &amp; provenance</span><strong data-record-state>Waiting</strong></div>
+          </div>
+
+          <div class="context-principle">
+            <span>What Ferry is building</span>
+            <strong>Shared identity + revision context + engineering rules + human decisions</strong>
+          </div>
+        </section>
+
+        <article class="system-node target-node" aria-labelledby="target-title">
+          <div class="node-heading">
+            <span class="node-index">03 / TARGET</span>
+            <span class="node-state"><i></i> Assembly linked</span>
+          </div>
+          <div class="system-identity">
+            <div class="system-glyph system-glyph--cad" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div>
+              <span>Mechanical source of truth</span>
+              <h3 id="target-title">Autodesk Inventor</h3>
+              <p>Assembly revision M.08</p>
+            </div>
+          </div>
+
+          <div class="assembly-miniature" aria-label="Simplified cabinet and PCB relationship">
+            <span class="assembly-label">CAB-01</span>
+            <div class="mini-cabinet">
+              <div class="mini-cold-plate">COLD PLATE</div>
+              <div class="mini-pcb"><i></i><i></i><i></i></div>
+              <div class="mini-conflict" aria-hidden="true"></div>
+            </div>
+            <span class="assembly-axis">X&nbsp;&nbsp;Y&nbsp;&nbsp;Z</span>
+          </div>
+
+          <div class="impact-list" aria-label="Simulated mechanical impacts">
+            <div data-impact="capacitor"><span>C1</span><strong>4.2 mm interference</strong></div>
+            <div data-impact="connector"><span>C2</span><strong>8 mm available</strong></div>
+            <div data-impact="mount"><span>C3</span><strong>6 mm misalignment</strong></div>
+          </div>
+        </article>
       </div>
-      <article class="source-system source-system--right">
-        <div class="source-icon source-icon--cad" aria-hidden="true"><i></i><i></i><i></i></div>
-        <div>
-          <span class="system-kicker">Mechanical source</span>
-          <strong>Autodesk Inventor</strong>
-          <span class="revision">Assembly revision M.08</span>
-        </div>
-      </article>
-    </section>
 
-    <section class="workbench" aria-label="Design synchronization workbench">
-      <aside class="revision-panel panel">
-        <div class="panel-heading">
+      <section class="agent-rail" aria-label="Working Ferry agents">
+        <div class="rail-line" aria-hidden="true"><i></i></div>
+        <article data-agent="altium">
+          <span class="agent-number">A1</span>
+          <div><strong>Altium Change Agent</strong><p>Captures the revision and changed objects.</p></div>
+          <span class="agent-state" data-agent-state>Queued</span>
+        </article>
+        <article data-agent="mapping">
+          <span class="agent-number">A2</span>
+          <div><strong>Context Mapping Agent</strong><p>Links objects, geometry, and rules.</p></div>
+          <span class="agent-state" data-agent-state>Queued</span>
+        </article>
+        <article data-agent="inventor">
+          <span class="agent-number">A3</span>
+          <div><strong>Inventor Assembly Agent</strong><p>Stages the assembly representation.</p></div>
+          <span class="agent-state" data-agent-state>Queued</span>
+        </article>
+        <article data-agent="impact">
+          <span class="agent-number">A4</span>
+          <div><strong>Constraint &amp; Impact Agent</strong><p>Runs deterministic engineering checks.</p></div>
+          <span class="agent-state" data-agent-state>Queued</span>
+        </article>
+        <article data-agent="return">
+          <span class="agent-number">A5</span>
+          <div><strong>Review &amp; Return Agent</strong><p>Prepares controlled source work.</p></div>
+          <span class="agent-state" data-agent-state>Queued</span>
+        </article>
+      </section>
+
+      <section class="trace-panel" aria-labelledby="trace-title">
+        <div class="trace-heading">
           <div>
-            <span class="panel-index">01</span>
-            <h2>Source changes</h2>
+            <p class="eyebrow">Selected change trace</p>
+            <h3 id="trace-title" data-trace-title>Capacitor bank moved 18 mm</h3>
           </div>
-          <span class="count">03</span>
+          <span class="trace-code" data-trace-code>C1</span>
         </div>
-
-        <p class="workflow-context"><span>Ferry detects</span> the revision and preserves the source, author, and changed geometry before any translation occurs.</p>
-
-        <ol class="change-list">
-          <li class="change-row" data-change="cap-bank">
-            <span class="change-number">C1</span>
-            <div>
-              <strong>DC-link capacitor bank</strong>
-              <span>Moved 18 mm toward cold plate</span>
-            </div>
-            <span class="change-state" aria-label="Changed"></span>
-          </li>
-          <li class="change-row" data-change="gate-connector">
-            <span class="change-number">C2</span>
-            <div>
-              <strong>Gate-driver connector J17</strong>
-              <span>Rotated 90° clockwise</span>
-            </div>
-            <span class="change-state" aria-label="Changed"></span>
-          </li>
-          <li class="change-row" data-change="mount-h4">
-            <span class="change-number">C3</span>
-            <div>
-              <strong>Mounting hole H4</strong>
-              <span>Shifted 6 mm on X axis</span>
-            </div>
-            <span class="change-state" aria-label="Changed"></span>
-          </li>
-        </ol>
-
-        <div class="revision-meta">
-          <div><span>Modified</span><strong>Today, 09:42</strong></div>
-          <div><span>Author</span><strong>Power electronics</strong></div>
-          <div><span>Workspace</span><strong>Prototype / C-series</strong></div>
-        </div>
-
-        <button class="primary-action when-ready" type="button" data-action="START_SYNC">
-          <span>Synchronize revision</span>
-          <span aria-hidden="true">→</span>
-        </button>
-        <button class="text-action when-not-ready" type="button" data-action="RESET">Reset concept</button>
-      </aside>
-
-      <section class="model-panel panel" aria-labelledby="assembly-heading">
-        <div class="panel-heading model-heading">
-          <div>
-            <span class="panel-index">02</span>
-            <h2 id="assembly-heading">Assembly impact</h2>
-          </div>
-          <span class="view-control" aria-label="Isometric model view">ISO VIEW</span>
-        </div>
-
-        <p class="workflow-context"><span>Ferry evaluates</span> the update inside the current assembly using explicit geometry and mechanical constraints.</p>
-
-        <div class="model-canvas" data-model-part="cabinet">
-          <div class="axis axis--x"><span>X</span></div>
-          <div class="axis axis--y"><span>Y</span></div>
-          <div class="axis axis--z"><span>Z</span></div>
-
-          <div class="cabinet-frame" aria-label="Simplified solid-state transformer cabinet model">
-            <div class="cabinet-label">CAB-01 / MODULE A</div>
-            <div class="rail rail--left"></div>
-            <div class="rail rail--right"></div>
-            <div class="cold-plate" data-model-part="cold-plate">
-              <span>COLD PLATE</span>
-              <i></i><i></i><i></i><i></i><i></i>
-            </div>
-            <div class="pcb" data-model-part="pcb">
-              <span class="pcb-label">PCB-A1 · C.14</span>
-              <div class="trace trace--one"></div>
-              <div class="trace trace--two"></div>
-              <div class="trace trace--three"></div>
-              <div class="capacitor-bank" data-model-part="capacitor">
-                <i></i><i></i><i></i><i></i>
-              </div>
-              <div class="connector" data-model-part="connector"><i></i><i></i><i></i></div>
-              <div class="mount-point mount-point--one"></div>
-              <div class="mount-point mount-point--two"></div>
-              <div class="mount-point mount-point--three"></div>
-              <div class="mount-point mount-point--four" data-model-part="mount"></div>
-            </div>
-            <div class="standoff-target" aria-hidden="true"></div>
-            <div class="dimension dimension--collision"><span>4.2 mm overlap</span></div>
-            <div class="dimension dimension--access"><span>8.0 / 15.0 mm</span></div>
-            <div class="dimension dimension--mount"><span>ΔX 6 mm</span></div>
-          </div>
-
-          <div class="sync-overlay" aria-live="polite">
-            <div class="sync-readout">
-              <span class="sync-index" data-sync-index>01 / 04</span>
-              <strong data-sync-label>Reading PCB revision C.14</strong>
-              <span class="sync-meter"><i data-sync-meter></i></span>
-            </div>
-          </div>
-
-          <div class="model-footer">
-            <span>Units · mm</span>
-            <span>Coordinate system · CAB-01</span>
-            <span>Geometry · simplified</span>
-          </div>
+        <div class="trace-flow">
+          <div><span>Source change</span><strong data-trace-source>DC-link bank · X +18.0 mm</strong></div>
+          <i aria-hidden="true">→</i>
+          <div><span>Mapped object</span><strong data-trace-mapping>Cold-plate relationship</strong></div>
+          <i aria-hidden="true">→</i>
+          <div><span>Design constraint</span><strong data-trace-constraint>No physical overlap</strong></div>
+          <i aria-hidden="true">→</i>
+          <div><span>Measured impact</span><strong data-trace-impact>4.2 mm interference</strong></div>
+          <i aria-hidden="true">→</i>
+          <div><span>Proposed resolution</span><strong data-trace-resolution>Move capacitor bank 7 mm away from cold plate</strong></div>
         </div>
       </section>
 
-      <aside class="review-panel panel">
-        <div class="panel-heading">
+      <section class="approval-panel" aria-label="Engineer-controlled return workflow">
+        <div class="approval-copy">
+          <p class="eyebrow">Return path</p>
+          <h3>Mechanical findings become reviewable electrical work.</h3>
+          <p>Ferry prepares the change set with its evidence and lineage. The engineer remains the approval boundary.</p>
+        </div>
+
+        <div class="approval-state when-ready">
+          <span class="approval-mark">00</span>
+          <div><strong>Run not started</strong><p>The source changes are visible before any agent acts.</p></div>
+        </div>
+
+        <div class="approval-state when-running">
+          <span class="approval-mark is-live">··</span>
+          <div><strong data-active-agent-copy>Agent workflow in progress</strong><p>Context is accumulating in the Ferry layer.</p></div>
+        </div>
+
+        <div class="approval-state when-review">
+          <span class="approval-mark">03</span>
+          <div><strong>Three impacts ready for review</strong><p>Every result remains linked to its source change and governing constraint.</p></div>
+          <button type="button" data-action="CREATE_PROPOSAL">Prepare Altium return set <span aria-hidden="true">→</span></button>
+        </div>
+
+        <div class="approval-state when-proposed">
+          <span class="approval-mark">R1</span>
           <div>
-            <span class="panel-index">03</span>
-            <h2>Engineering review</h2>
+            <strong>Engineer approval required</strong>
+            <p>No source design is changed automatically.</p>
+            <ul>
+              <li>Move capacitor bank away from cold plate</li>
+              <li>Restore connector service envelope</li>
+              <li>Relink H4 to the standoff axis</li>
+            </ul>
           </div>
-          <span class="review-status" data-review-status>Waiting</span>
+          <button type="button" data-action="APPROVE">Approve return proposal <span aria-hidden="true">✓</span></button>
         </div>
 
-        <p class="workflow-context"><span>Ferry returns</span> the finding as traceable engineering work—not a black-box edit—and keeps final authority with the engineer.</p>
-
-        <div class="empty-review when-ready">
-          <span class="empty-mark" aria-hidden="true">⌁</span>
-          <strong>No assembly analysis yet</strong>
-          <p>Synchronize the electrical revision to evaluate its effect on the current cabinet model.</p>
+        <div class="approval-state when-approved">
+          <span class="approval-mark is-approved">✓</span>
+          <div><strong>Decision recorded</strong><p>Return set R.01 is ready for the electrical engineer to inspect in Altium.</p></div>
         </div>
-
-        <div class="sync-steps when-syncing" aria-label="Synchronization progress">
-          <div class="sync-step" data-sync-step="0"><span>01</span>Read electrical revision</div>
-          <div class="sync-step" data-sync-step="1"><span>02</span>Align shared references</div>
-          <div class="sync-step" data-sync-step="2"><span>03</span>Update cabinet assembly</div>
-          <div class="sync-step" data-sync-step="3"><span>04</span>Evaluate constraints</div>
-        </div>
-
-        <div class="review-content when-review">
-          <div class="finding-summary">
-            <span><strong>2</strong> conflicts</span>
-            <span><strong>1</strong> review item</span>
-          </div>
-
-          <div class="finding-tabs" role="tablist" aria-label="Assembly findings">
-            <button type="button" role="tab" aria-selected="true" data-finding="cold-plate">F01</button>
-            <button type="button" role="tab" aria-selected="false" data-finding="service-access">F02</button>
-            <button type="button" role="tab" aria-selected="false" data-finding="standoff">F03</button>
-          </div>
-
-          <article class="finding-detail" aria-live="polite">
-            <span class="finding-type" data-finding-label>Physical interference</span>
-            <h3 data-finding-title>Capacitor bank intersects cold plate</h3>
-            <p data-finding-description>The revised capacitor position enters the reserved cold-plate volume. Closest geometry is highlighted in the assembly.</p>
-            <dl class="finding-measures">
-              <div><dt>Measured</dt><dd data-finding-measure>4.2 mm</dd></div>
-              <div><dt>Required</dt><dd data-finding-expected>No overlap</dd></div>
-            </dl>
-            <div class="traceability">
-              <div><span>Electrical source</span><strong data-finding-source>C14 · capacitor move</strong></div>
-              <div><span>Mechanical constraint</span><strong data-finding-constraint>M08 · cold plate envelope</strong></div>
-            </div>
-          </article>
-
-          <button class="primary-action when-review-only" type="button" data-action="CREATE_PROPOSAL">
-            <span>Prepare return change</span>
-            <span aria-hidden="true">→</span>
-          </button>
-        </div>
-
-        <div class="proposal when-proposed">
-          <div class="proposal-heading">
-            <span>Proposed Altium update</span>
-            <strong>Return set R.01</strong>
-          </div>
-          <ol>
-            <li><span>01</span>Move capacitor bank 7 mm away from cold plate</li>
-            <li><span>02</span>Restore 15 mm service envelope at J17</li>
-            <li><span>03</span>Relink H4 to Inventor standoff axis</li>
-          </ol>
-          <div class="approval-gate">
-            <span class="lock-mark" aria-hidden="true"></span>
-            <div><strong>Engineer approval required</strong><span>No source design is changed automatically.</span></div>
-          </div>
-          <button class="primary-action" type="button" data-action="APPROVE">
-            <span>Approve return change</span>
-            <span aria-hidden="true">✓</span>
-          </button>
-        </div>
-
-        <div class="approved-state when-approved">
-          <span class="approved-mark" aria-hidden="true">✓</span>
-          <span class="finding-type">Decision recorded</span>
-          <h3>Return change approved</h3>
-          <p>R.01 is ready for the electrical designer to inspect in Altium. The original revision and every affected constraint remain linked.</p>
-          <div class="ledger">
-            <div><span>Decision</span><strong>Approved for review</strong></div>
-            <div><span>Design state</span><strong>C.14 + M.08</strong></div>
-            <div><span>Record</span><strong>CR-2026-081</strong></div>
-          </div>
-        </div>
-      </aside>
+      </section>
     </section>
 
-    <section class="ferry-method" aria-labelledby="ferry-method-title">
-      <div class="method-intro">
-        <p class="eyebrow">Why Ferry</p>
-        <h2 id="ferry-method-title">The integration follows the engineering work.</h2>
-        <p>We do not begin with a generic automation layer. We begin with the engineers, the handoffs they manage, and the decisions that matter—then build narrowly around the existing engineering tools.</p>
-      </div>
-      <ol class="method-steps">
-        <li>
-          <span>01</span>
-          <div><strong>Map the real workflow</strong><p>Trace one representative change with the people doing the work: inputs, checks, exceptions, and approval boundaries.</p></div>
-        </li>
-        <li>
-          <span>02</span>
-          <div><strong>Connect the systems in place</strong><p>Integrate at controlled boundaries so Altium and Inventor remain the systems of record.</p></div>
-        </li>
-        <li>
-          <span>03</span>
-          <div><strong>Encode engineering judgment</strong><p>Turn company-specific design rules and expert corrections into explicit, testable checks.</p></div>
-        </li>
-        <li>
-          <span>04</span>
-          <div><strong>Prove a narrow loop</strong><p>Validate one module and a known set of changes before expanding—leaving behind a reusable decision trail.</p></div>
-        </li>
-      </ol>
-      <div class="method-outcome">
-        <span>What this unlocks</span>
-        <p>Engineers can move faster without surrendering control, while the organization retains the reasoning behind each design decision.</p>
-      </div>
-    </section>
-
-    <section class="final-cta">
-      <div>
-        <p class="eyebrow">Next step</p>
-        <h2>Does this match the way your team actually works?</h2>
-        <p>This concept models the loop from our conversation. A short working session will tell us where the manual translation remains, which checks matter most, and what a narrow pilot should prove.</p>
-      </div>
-      <a href="mailto:contact@ferrylabs.ai?subject=Hyperscale%20Power%20design%20workflow">
-        <span>Review with your design engineer</span>
-        <span aria-hidden="true">↗</span>
-      </a>
+    <section class="outcome">
+      <span>What this unlocks</span>
+      <p>Engineers move faster without losing control. Altium and Inventor remain the systems of record; Ferry preserves the context between them.</p>
+      <a href="mailto:contact@ferrylabs.ai?subject=Hyperscale%20Power%20design%20workflow">Review the workflow together <span aria-hidden="true">↗</span></a>
     </section>
   </main>
 
@@ -350,6 +251,6 @@
     <span>Ferry Labs · San Francisco</span>
     <span>Concept prepared from the August 2026 discussion</span>
   </footer>
-  <script type="module" src="hyperscale-bridge.js?v=20260805"></script>
+  <script type="module" src="hyperscale-bridge.js?v=20260805-context"></script>
 </body>
 </html>
