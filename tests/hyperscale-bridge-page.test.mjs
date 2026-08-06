@@ -15,103 +15,110 @@ const behavior = readFileSync(
   'utf8'
 );
 
-test('discloses simulated data and exposes the full review workflow', () => {
+test('centers Ferry between the two engineering systems', () => {
   assert.match(html, /Simulated design data/i);
-  assert.doesNotMatch(html, /HSP-SST \/ Power Module A/);
   assert.match(html, /Altium Designer/);
   assert.match(html, /Autodesk Inventor/);
-
-  for (const action of ['START_SYNC', 'CREATE_PROPOSAL', 'APPROVE', 'RESET']) {
-    assert.match(html, new RegExp(`data-action="${action}"`));
-  }
+  assert.match(html, /Ferry Unified Engineering Context Layer/);
+  assert.match(html, /Electrical source of truth/i);
+  assert.match(html, /Mechanical source of truth/i);
+  assert.doesNotMatch(html, /HSP-SST|story-brief|class="workbench"|ferry-method/i);
 });
 
-test('explains the engineering case and Ferry engagement model', () => {
+test('shows the five named agents as working system roles', () => {
+  for (const name of [
+    'Altium Change Agent',
+    'Context Mapping Agent',
+    'Inventor Assembly Agent',
+    'Constraint &amp; Impact Agent',
+    'Review &amp; Return Agent',
+  ]) {
+    assert.match(html, new RegExp(name));
+  }
+  assert.equal((html.match(/data-agent="/g) ?? []).length, 5);
+});
+
+test('shows the three Altium changes that trigger the workflow', () => {
+  for (const change of [
+    'Capacitor bank moved 18 mm',
+    'Connector J17 rotated 90°',
+    'Mounting hole H4 shifted 6 mm',
+  ]) {
+    assert.match(html, new RegExp(change));
+  }
+  assert.equal((html.match(/data-change="/g) ?? []).length, 3);
+});
+
+test('makes each change traceable from source through resolution', () => {
   for (const label of [
-    'The problem',
-    'Systems in the loop',
-    'What Ferry builds',
-    'Engineering outcome',
-    'Why Ferry',
+    'Source change',
+    'Mapped object',
+    'Design constraint',
+    'Measured impact',
+    'Proposed resolution',
   ]) {
     assert.match(html, new RegExp(label, 'i'));
   }
-
-  assert.match(html, /coordination layer/i);
-  assert.match(html, /existing engineering tools/i);
-  assert.match(html, /engineer approval/i);
-  assert.match(html, /company-specific design rules/i);
+  assert.match(html, /4\.2 mm interference/);
+  assert.match(html, /8 mm available/);
+  assert.match(html, /6 mm misalignment/);
 });
 
-test('renders a CSS-authored cabinet model with named engineering parts', () => {
-  assert.doesNotMatch(html, /<svg\b/i);
-
-  for (const part of [
-    'cabinet',
-    'pcb',
-    'cold-plate',
-    'capacitor',
-    'connector',
-    'mount',
+test('shows what the context layer accumulates', () => {
+  for (const record of [
+    'Object identities',
+    'Revision changes',
+    'Geometry mappings',
+    'Design constraints',
+    'Decisions &amp; provenance',
   ]) {
-    assert.match(html, new RegExp(`data-model-part="${part}"`));
+    assert.match(html, new RegExp(record));
   }
-
-  assert.match(html, /4\.2 mm/);
-  assert.match(html, /18 mm/);
-  assert.match(html, /6 mm/);
+  assert.equal((html.match(/data-context-record="/g) ?? []).length, 5);
 });
 
-test('keeps engineer review explicit and provides one final CTA', () => {
+test('keeps one run action and explicit engineer approval', () => {
+  assert.match(html, /data-action="START_RUN"/);
+  assert.match(html, /Run design coordination/);
+  assert.equal((html.match(/data-action="START_RUN"/g) ?? []).length, 1);
   assert.match(html, /Engineer approval required/i);
-  assert.match(html, /Review with your design engineer/i);
-  assert.match(html, /mailto:contact@ferrylabs\.ai/);
-  assert.equal((html.match(/class="final-cta"/g) ?? []).length, 1);
+  assert.match(html, /No source design is changed automatically/i);
+  assert.match(html, /data-action="CREATE_PROPOSAL"/);
+  assert.match(html, /data-action="APPROVE"/);
+  assert.match(html, /data-action="RESET"/);
 });
 
-test('uses the restrained industrial visual system', () => {
-  assert.match(css, /--paper:\s*#f2f0e9/i);
-  assert.match(css, /--ink:\s*#171b1c/i);
-  assert.match(css, /font-variant-numeric:\s*tabular-nums/);
-  assert.match(css, /grid-template-columns:/);
-  assert.match(css, /@media \(max-width:\s*760px\)/);
-  assert.match(css, /:focus-visible/);
-  assert.doesNotMatch(css, /linear-gradient|radial-gradient|backdrop-filter/i);
-  assert.doesNotMatch(html, /sparkle|chatbot|AI-powered|magic/i);
-});
-
-test('styles the editorial briefing and Ferry method responsively', () => {
+test('uses a responsive CSS-authored system canvas', () => {
   for (const selector of [
-    '.story-brief',
-    '.brief-item',
-    '.workflow-intro',
-    '.workflow-context',
-    '.ferry-method',
-    '.method-steps',
+    '.system-canvas',
+    '.source-node',
+    '.context-core',
+    '.target-node',
+    '.agent-rail',
+    '.trace-panel',
+    '.approval-panel',
   ]) {
     assert.match(css, new RegExp(selector.replace('.', '\\.')));
   }
-
-  assert.match(css, /@media \(max-width:\s*760px\)[\s\S]*\.story-brief/);
-  assert.match(css, /@media \(max-width:\s*760px\)[\s\S]*\.ferry-method/);
+  assert.match(css, /@media \(max-width:\s*760px\)/);
+  assert.match(css, /font-variant-numeric:\s*tabular-nums/);
+  assert.match(css, /:focus-visible/);
   assert.doesNotMatch(css, /linear-gradient|radial-gradient|backdrop-filter/i);
+  assert.doesNotMatch(html, /<svg\b|sparkle|chatbot|AI-powered|magic/i);
 });
 
-test('loads the controller and connects findings to the shared inspector', () => {
-  assert.match(
-    html,
-    /<script type="module" src="hyperscale-bridge\.js\?v=20260805"><\/script>/
-  );
-  assert.equal((html.match(/data-finding="/g) ?? []).length, 3);
-  assert.equal((html.match(/class="finding-detail"/g) ?? []).length, 1);
+test('controller drives agents, trace selection, approval, and reset locally', () => {
   assert.match(behavior, /from '\.\/hyperscale-bridge-state\.mjs'/);
-  assert.match(behavior, /data-finding-title/);
-  assert.match(behavior, /COMPLETE_SYNC/);
-});
-
-test('controller retains explicit engineer control and reset behavior', () => {
-  assert.match(behavior, /dispatch\(button\.dataset\.action\)/);
-  assert.match(behavior, /RESET/);
+  for (const event of [
+    'START_RUN',
+    'ADVANCE_AGENT',
+    'SELECT_CHANGE',
+    'CREATE_PROPOSAL',
+    'APPROVE',
+    'RESET',
+  ]) {
+    assert.match(behavior, new RegExp(event));
+  }
   assert.match(behavior, /prefers-reduced-motion/);
   assert.doesNotMatch(behavior, /fetch\(|XMLHttpRequest|WebSocket/);
 });
